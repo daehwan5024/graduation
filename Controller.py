@@ -11,6 +11,7 @@ def get_center(img, location_x, location_y):
     img_mask = cv2.inRange(img_hsv, floor, ceiling)
     kernel = np.ones((11, 11), np.uint8)
     img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_OPEN, kernel)
+
     img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_CLOSE, kernel)
 
     label_num, img_label, stats, centroids = cv2.connectedComponentsWithStats(img_mask)

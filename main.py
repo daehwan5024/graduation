@@ -18,7 +18,7 @@ pid_x = Controller.Control(360, 0.5, 0, 0, created_time_str)
 pid_y = Controller.Control(240, 0.5, 0, 0, created_time_str)
 pid_z = Controller.Control(120, 0.5, 0, 0, created_time_str)
 initial_time = time.time()
-os.mkdir("D:/coding/PycharmProjects/Graduation_project/data/" + created_time_str)
+os.mkdir("D:/coding/PycharmProjects/graduation/data/" + created_time_str)
 while True:
     ret1, img1 = cap1.read()
     ret2, img2 = cap2.read()
