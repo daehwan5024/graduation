@@ -1,9 +1,10 @@
-import cv2
-import numpy as np
 import math
 
-floor = np.array([88, 129, 129])
-ceiling = np.array([108, 255, 255])
+import cv2
+import numpy as np
+
+floor = np.array([83, 120, 120])
+ceiling = np.array([103, 255, 255])
 
 
 def get_center(img, location_x, location_y):
@@ -35,7 +36,7 @@ def get_center(img, location_x, location_y):
                 return_y = center_y
                 dist_min = dist
                 cv2.circle(img, (center_x, center_y), 10, (0, 0, 255), 5)
-                cv2.rectangle(img, (x, y), (x+width, y+height), (0, 0, 255))
+                cv2.rectangle(img, (x, y), (x + width, y + height), (0, 0, 255))
 
     return return_x, return_y, img
 
@@ -44,13 +45,37 @@ def make_str(obj):
     return_str = ""
     enumerate_obj = enumerate(obj)
     for x, value in enumerate_obj:
-        return_str = return_str+str(value)+"\n"
+        return_str = return_str + str(value) + "\n"
     return return_str
 
 
+class GetCenter:
+    def __init__(self):
+        self.x_position = []
+        self.y_position = []
+        self.len = 0
+
+    def cal_pos(self, img):
+        if self.len == 0:
+            x_position, y_position, ret_img = get_center(img, -1, -1)
+            if x_position != -1:
+                self.x_position.append(x_position)
+                self.y_position.append(y_position)
+                self.len += 1
+            return x_position, y_position, ret_img
+        else:
+            x_position, y_position, ret_img = get_center(img, self.x_position[-1], self.y_position[-1])
+            if x_position != -1:
+                self.x_position.append(x_position)
+                self.y_position.append(y_position)
+                self.len += 1
+            return x_position, y_position, ret_img
+
+
 class Control:
-    def __init__(self, goal, k_p, k_i, k_d, create_time):
+    def __init__(self, goal, k_p, k_i, k_d, create_time, name):
         self.goal = goal
+        self.name = name
         self.k_p = k_p
         self.k_i = k_i
         self.k_d = k_d
@@ -59,6 +84,7 @@ class Control:
         self.time = []
         self.create_time = create_time
         self.Integral = 0
+        self.goal_changed = 0
         self.len = 0
 
     def append(self, location, time):
@@ -71,22 +97,29 @@ class Control:
         if self.len == 1:
             derivative = 0
         else:
-            derivative = (self.error[-1]-self.error[-2])/(self.time[-1]-self.time[-2])
-            self.Integral += (self.error[-1]+self.error[-2])*(self.time[-1]-self.time[-2]) / 2
+            derivative = (self.error[-1] - self.error[-2]) / (self.time[-1] - self.time[-2])
+            self.Integral += (self.error[-1] + self.error[-2]) * (self.time[-1] - self.time[-2]) / 2
 
-        return self.error[-1]*self.k_p + self.Integral*self.k_i + derivative*self.k_d
+        return self.error[-1] * self.k_p + self.Integral * self.k_i + derivative * self.k_d
 
-    def get_last(self):
-        if self.len == 0:
-            return -1
-        return self.goal - self.error[-1]
+    def change_goal(self, goal):
+        self.goal_changed += 1
+        self.save(self.name+str(self.goal_changed))
+        if goal == -1:
+            return
+        self.goal = goal
+        self.location = []
+        self.error = []
+        self.time = []
+        self.Integral = 0
+        self.len = 0
 
     def save(self, name):
         if self.len == 0:
             return
-        f = open("./data/"+self.create_time+"/"+name+".txt", 'w')
-        f.write("목표 : "+str(self.goal)+"\n")
-        f.write(str(self.len)+'\n\n\n')
+        f = open("./data/" + self.create_time + "/" + name + ".txt", 'w')
+        f.write("목표 : " + str(self.goal) + "\n")
+        f.write(str(self.len) + '\n\n\n')
         f.write("time\n")
         f.write(make_str(self.time))
         f.write("\n\n\nlocation\n")
