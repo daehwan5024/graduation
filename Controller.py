@@ -37,7 +37,6 @@ def get_center(img, location_x, location_y):
                 dist_min = dist
                 cv2.circle(img, (center_x, center_y), 10, (0, 0, 255), 5)
                 cv2.rectangle(img, (x, y), (x + width, y + height), (0, 0, 255))
-
     return return_x, return_y, img
 
 

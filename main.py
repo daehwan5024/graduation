@@ -12,8 +12,8 @@ def nothing(null):
 
 # time.strftime("%Y-%m-%d-%H시%M분%S초", time.localtime(time.time()))
 
-drone = tello.Tello()
-drone.connect()
+# drone = tello.Tello()
+# drone.connect()
 
 
 def change_goal():
