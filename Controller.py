@@ -85,6 +85,7 @@ class Control:
         self.Integral = 0
         self.goal_changed = 0
         self.len = 0
+        self.return_value = []
 
     def append(self, location, time):
         if location == -1:
@@ -98,8 +99,8 @@ class Control:
         else:
             derivative = (self.error[-1] - self.error[-2]) / (self.time[-1] - self.time[-2])
             self.Integral += (self.error[-1] + self.error[-2]) * (self.time[-1] - self.time[-2]) / 2
-
-        return self.error[-1] * self.k_p + self.Integral * self.k_i + derivative * self.k_d
+        self.return_value.append(self.error[-1] * self.k_p + self.Integral * self.k_i + derivative * self.k_d)
+        return self.return_value[-1]
 
     def change_goal(self, goal):
         self.goal_changed += 1
@@ -110,17 +111,26 @@ class Control:
         self.location = []
         self.error = []
         self.time = []
+        self.return_value = []
         self.Integral = 0
         self.len = 0
 
     def save(self, name):
         if self.len == 0:
             return
-        f = open("./data/" + self.create_time + "/" + name + ".txt", 'w')
-        f.write("목표 : " + str(self.goal) + "\n")
+        f = open("./data/" + self.create_time + "/" + name + "_time.txt", 'w')
+        f.write("goal : " + str(self.goal) + "\n")
         f.write(str(self.len) + '\n\n\n')
         f.write("time\n")
         f.write(make_str(self.time))
-        f.write("\n\n\nlocation\n")
+        f.close()
+
+        f = open("./data/" + self.create_time + '/' + name + "_location.txt", 'w')
+        f.write("location\n")
         f.write(make_str(self.location))
+        f.close()
+
+        f = open("./data/" + self.create_time + '/' + name + "_return_value.txt", 'w')
+        f.write("return value\n")
+        f.write(make_str(self.return_value))
         f.close()
