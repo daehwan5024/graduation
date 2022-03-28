@@ -1,3 +1,7 @@
+"""
+마커의 중앙 위치, PID 제어와 같은 연산을 위해 제작한 라이브러리
+"""
+
 import math
 
 import cv2
@@ -7,7 +11,7 @@ floor = np.array([83, 120, 120])
 ceiling = np.array([103, 255, 255])
 
 
-def get_center(img, location_x, location_y):
+def get_center(img, location_x, location_y):  # img에서 기존의 위치에서 가장 가까운 마커의 중앙 값을 리턴
     img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     img_mask = cv2.inRange(img_hsv, floor, ceiling)
     kernel = np.ones((11, 11), np.uint8)
@@ -40,7 +44,7 @@ def get_center(img, location_x, location_y):
     return return_x, return_y, img
 
 
-def make_str(obj):
+def make_str(obj):  # obj내의 값을 String 형태로 리턴
     return_str = ""
     enumerate_obj = enumerate(obj)
     for x, value in enumerate_obj:
@@ -48,7 +52,7 @@ def make_str(obj):
     return return_str
 
 
-class GetCenter:
+class GetCenter:  # 마커의 위치를 기록하고 img에서 마커의 중앙 위치를 계산
     def __init__(self):
         self.x_position = []
         self.y_position = []
@@ -71,7 +75,7 @@ class GetCenter:
             return x_position, y_position, ret_img
 
 
-class Control:
+class Control:  # PID 제어의 연산을 위해 만든 클래스
     def __init__(self, goal, k_p, k_i, k_d, create_time, name):
         self.goal = goal
         self.name = name
