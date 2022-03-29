@@ -1,3 +1,7 @@
+"""
+카메라에서 픽셀의 HSV 색을 얻어오기 위한 .py 파일
+"""
+
 import cv2
 import numpy as np
 
@@ -14,9 +18,9 @@ def nothing(null):
     pass
 
 
-def mouse_callback(event, x_position, y_position, flags, param):
+def mouse_callback(event, x_position, y_position, flags, param):  # 클릭시 색을 설정
     global hsv, floor1, floor2, floor3, ceiling1, ceiling2, ceiling3
-    h_threshold = 10    # under 90
+    h_threshold = 10  # hue 값의 오차 범위
 
     if event == cv2.EVENT_LBUTTONDOWN:
         color = img_color[y_position, x_position]
@@ -70,7 +74,6 @@ while True:
     height, width = img_color.shape[:2]
     img_color = cv2.resize(img_color, (width, height), interpolation=cv2.INTER_AREA)
 
-    # HSV 색공간으로 변형
     img_hsv = cv2.cvtColor(img_color, cv2.COLOR_BGR2HSV)
     img_hsv = cv2.blur(img_hsv, (5, 5), 0)
     img_mask1 = cv2.inRange(img_hsv, floor1, ceiling1)

@@ -17,10 +17,6 @@ def nothing(null):
     pass
 
 
-drone = tello.Tello()
-drone.connect()
-
-
 def change_goal():  # 목표 위치 바꾸기
     x = cv2.getTrackbarPos("position X", "controller")
     y = cv2.getTrackbarPos("position Y", "controller")
@@ -39,6 +35,8 @@ cap2 = cv2.VideoCapture(cv2.CAP_DSHOW + 0)  # 오른쪽 카메라 (드론의 x �
 cap1.set(cv2.CAP_PROP_FRAME_WIDTH, 1920), cap1.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080), cap1.set(cv2.CAP_PROP_FPS, 60)
 cap2.set(cv2.CAP_PROP_FRAME_WIDTH, 1920), cap2.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080), cap2.set(cv2.CAP_PROP_FPS, 60)
 
+drone = tello.Tello()
+drone.connect()
 
 '''기본 위치 설정 : 화면의 중앙, z축 거리는 90cm'''
 goal_x = int(cap1.get(cv2.CAP_PROP_FRAME_WIDTH)/2)

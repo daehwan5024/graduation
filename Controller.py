@@ -17,8 +17,6 @@ def get_center(img, location_x, location_y):  # img에서 기존의 위치에서
     kernel = np.ones((11, 11), np.uint8)
     img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_OPEN, kernel)
 
-    img_mask = cv2.morphologyEx(img_mask, cv2.MORPH_CLOSE, kernel)
-
     label_num, img_label, stats, centroids = cv2.connectedComponentsWithStats(img_mask)
     return_x = -1
     return_y = -1
