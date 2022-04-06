@@ -1,4 +1,4 @@
-"""
+��"""
 카메라에서 픽셀의 HSV 색을 얻어오기 위한 .py 파일
 """
 
@@ -111,4 +111,4 @@ while True:
         break
 
 cap.release()
-cv2.destroyAllWindows()
+cv2.destroyAllWindows()��
